@@ -6,6 +6,8 @@ import json
 import time
 import logging
 import csv
+import googletrans
+from googletrans import Translator
 
 from multiprocessing import Pool, Process, Value, Lock
 
@@ -312,7 +314,8 @@ def get_image(img_url):
 
         return finish('success')
 
-
+data = {}
+data["pastas"]=[]
 for class_wnid in classes_to_scrape:
 
     class_name = class_info_dict[class_wnid]["class_name"]
@@ -322,10 +325,16 @@ for class_wnid in classes_to_scrape:
     time.sleep(0.05)
     resp = requests.get(url_urls)
 
-    class_folder = os.path.join(imagenet_images_folder, class_name)
+    #aqui preciso  fazer um script para traduzir as palavras do class_name
+    translator = Translator()
+    class_name_folder = translator.translate(class_name,src='en',dest='pt')
+
+
+    class_folder = os.path.join(imagenet_images_folder, class_name_folder.text)
     if not os.path.exists(class_folder):
         os.mkdir(class_folder)
-
+    
+    data["pastas"].append(class_name_folder.text)
     class_images.value = 0
 
     urls = [url.decode('utf-8') for url in resp.content.splitlines()]
@@ -336,3 +345,5 @@ for class_wnid in classes_to_scrape:
     print(f"Multiprocessing workers: {args.multiprocessing_workers}")
     with Pool(processes=args.multiprocessing_workers) as p:
         p.map(get_image,urls)
+with open("data.txt", "w"   ) as outfile:
+    json.dump(data,outfile)
