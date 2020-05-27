@@ -14,7 +14,7 @@ This software is written in Python 3
 
 The following command will randomly select 100 of ImageNet classes with at least 200 images in them and start downloading:
 ```
-python ./downloader.py \
+python ./down.py \
     -data_root /data_root_folder/imagenet \
     -number_of_classes 100 \
     -images_per_class 200
@@ -23,7 +23,7 @@ python ./downloader.py \
 
 The following command will download 500 images from each of selected class:
 ```
-python ./downloader.py 
+python ./down.py 
     -data_root /data_root_folder/imagenet \
     -use_class_list True \
     -class_list n09858165 n01539573 n03405111 \
@@ -38,9 +38,10 @@ I've implementet parallel request processing and I've added **multiprocessing_wo
 You can do something like this:
 
 ```
-python ./downloader.py \
+python ./down.py \
     -data_root /data_root_folder/imagenet \
     -number_of_classes 1000 \
     -images_per_class 500 \
     -multiprocessing_workers 24
 ```
+# banco_de_imagens
